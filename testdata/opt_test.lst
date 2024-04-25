@@ -1,0 +1,7 @@
+act1 homedir
+act1 homedir/user
+act1 homedir/user/src
+act1 homedir/user/src/mainprog.py
+epilog var
+epilog var/lib
+epilog var/lib/libwhosit.so

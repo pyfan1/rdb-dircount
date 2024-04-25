@@ -45,11 +45,11 @@ def count_actions():
                     actions[fields[0]] = actions.setdefault(fields[0], 0) + 1
                     count_dirs(fields[1])
 
-def display_count_dict(counts, name):
+def display_count_dict(counts, message):
     """Display a dictionary containing the number of occurrences of each key."""
     if len(counts):
         print('')
-        print("Length of", name, "dict is ", len(counts) )
+        print(message)
         print('')
     for tpl in sorted(sorted(counts.items()), key=lambda x: x[1], 
                           reverse=True):
@@ -57,9 +57,12 @@ def display_count_dict(counts, name):
 
 if __name__ == '__main__':
     count_actions()
-    display_count_dict(actions, "actions")
-    display_count_dict(top_dirs, "top_dirs")
-    display_count_dict(all_dirs, "directory")
+    display_count_dict(actions, 
+                       "There are {} distinct actions.".format(len(actions)))
+    display_count_dict(top_dirs, 
+            "There are {} top level directories.".format(len(top_dirs)))
+    display_count_dict(all_dirs, 
+            "There are {} total files and directories.".format(len(all_dirs)))
     if bad_lines:
         print('')
         print("Found", bad_lines, " bad lines.")

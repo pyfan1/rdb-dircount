@@ -1,0 +1,7 @@
+seek opt
+seek opt/newapp
+seek opt/newapp/mainprog
+track usr
+track usr/local
+track usr/local/include
+track usr/local/include/janssen.h

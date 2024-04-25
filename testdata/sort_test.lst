@@ -1,0 +1,8 @@
+view etc
+view etc/hosts
+view etc/services
+hide usr
+hide usr/share
+hide usr/share/man
+hide usr/share/man/man1
+hide usr/share/man/man1/less
