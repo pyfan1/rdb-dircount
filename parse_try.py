@@ -14,12 +14,15 @@ group.add_argument('--by-count', '-c', action='store_true',
 group.add_argument('--by-name', '-n', action='store_true',
                    help='sort entries by name')
 
-print(parser.parse_args())
+parse_namespace, remaining_args = parser.parse_known_args()
+print(parse_namespace)
 if CHECK_PARSE:
     print(parser.parse_args(['--by-count']))
     print(parser.parse_args(['--by-name']))
 else:
-    with fileinput.input() as f:
+    with fileinput.input(remaining_args) as f:
         for line in f:
-            print('Filename: {}  fileno: {}.'.format([fileinput.filename(), fileinput.fileno() ]) )
+            if fileinput.isfirstline():
+                print('Filename: {}  fileno: {}.'.format(fileinput.filename(), fileinput.fileno() ) )
+                print('    Line: {}  Is stdin: {}.'.format(fileinput.lineno(), fileinput.isstdin() ) )
 

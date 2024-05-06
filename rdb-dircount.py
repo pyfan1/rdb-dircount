@@ -6,8 +6,8 @@
 #       rdiff-backup list files --changed-since ...
 #
 
-import sys
 import fileinput
+import argparse
 
 actions = {}
 bad_lines = 0
@@ -31,11 +31,11 @@ def count_dirs(path):
         top_dirs[folders[0]] = top_dirs.setdefault(folders[0], 0) + 1
         count_subdirs(folders)
 
-def count_actions():
+def count_actions(file_list):
     """Count the actions found in file.
         The first field of each line is the action."""
     global bad_lines
-    with fileinput.input() as f:
+    with fileinput.input(file_list) as f:
         for line in f:
             fields = line.rstrip().split(maxsplit=1)
             if fields:
@@ -55,8 +55,20 @@ def display_count_dict(counts, message):
                           reverse=True):
         print(" {:9} {}".format(tpl[1], tpl[0]))
 
+def parse_command():
+    """Analyze command line and return opions and file names."""
+    parser = argparse.ArgumentParser(
+            description='Count directories and files backed up by rdiff-backup.')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--by-count', '-c', action='store_true', 
+                   help='sort by descending count, then by name (the default)')
+    group.add_argument('--by-name', '-n', action='store_true',
+                   help='sort entries by name')
+    return parser.parse_known_args()
+
 if __name__ == '__main__':
-    count_actions()
+    options, file_list = parse_command()
+    count_actions(file_list)
     display_count_dict(actions, 
                        "There are {} distinct actions.".format(len(actions)))
     display_count_dict(top_dirs, 
