@@ -45,15 +45,26 @@ def count_actions(file_list):
                     actions[fields[0]] = actions.setdefault(fields[0], 0) + 1
                     count_dirs(fields[1])
 
-def display_count_dict(counts, message):
+def display_count_dict(counts, message, options):
     """Display a dictionary containing the number of occurrences of each key."""
     if len(counts):
         print('')
         print(message)
         print('')
-    for tpl in sorted(sorted(counts.items()), key=lambda x: x[1], 
+    lineout = lambda first, second: print(" {:9} {}".format(first, second))
+    if options.by_name and not options.by_count:    # Which sort order?
+        # Sorting by name - since dictionary keys are unique
+        # there's no need to do more than one sort
+        for tpl in sorted(counts.items()):
+            lineout(tpl[1], tpl[0])
+    else:   # Sorting by count
+        # We rely on the fact that Python uses a stable sort algorithm.
+        # The inner sort is on the key and the outer is on the value
+        # so the entries appear sorted first by count and then by name
+        # within each count.
+        for tpl in sorted(sorted(counts.items()), key=lambda x: x[1], 
                           reverse=True):
-        print(" {:9} {}".format(tpl[1], tpl[0]))
+            lineout(tpl[1], tpl[0])
 
 def parse_command():
     """Analyze command line and return opions and file names."""
@@ -70,11 +81,14 @@ if __name__ == '__main__':
     options, file_list = parse_command()
     count_actions(file_list)
     display_count_dict(actions, 
-                       "There are {} distinct actions.".format(len(actions)))
+             "There are {} distinct actions.".format(len(actions)),
+             options)
     display_count_dict(top_dirs, 
-            "There are {} top level directories.".format(len(top_dirs)))
+            "There are {} top level directories.".format(len(top_dirs)),
+            options)
     display_count_dict(all_dirs, 
-            "There are {} total files and directories.".format(len(all_dirs)))
+            "There are {} total files and directories.".format(len(all_dirs)),
+            options)
     if bad_lines:
         print('')
         print("Found", bad_lines, " bad lines.")
