@@ -31,6 +31,7 @@ actions = {}
 bad_lines = 0
 top_dirs = {}
 all_dirs = {}
+input_files = []
 
 def count_subdirs(components):
     """Count each component of the path for one subdirectory."""
@@ -55,6 +56,8 @@ def count_actions(file_list):
     global bad_lines
     with fileinput.input(file_list) as f:
         for line in f:
+            if fileinput.isfirstline():
+                input_files.append(fileinput.filename())
             fields = line.rstrip().split(maxsplit=1)
             if fields:
                 if len(fields) < 2:
@@ -62,6 +65,17 @@ def count_actions(file_list):
                 else:
                     actions[fields[0]] = actions.setdefault(fields[0], 0) + 1
                     count_dirs(fields[1])
+
+def display_file_names():
+    """Display names of the input files."""
+    if len(input_files):
+        print('')
+        if len(input_files) > 1:
+            print("There were {} input files.".format(len(input_files)))
+        else:
+            print("There was {} input file.".format(len(input_files)))
+        for fn in input_files:
+            print("        {}".format(fn))
 
 def display_count_dict(counts, message, options):
     """Display a dictionary containing the number of occurrences of each key."""
@@ -98,6 +112,7 @@ def parse_command():
 if __name__ == '__main__':
     options, file_list = parse_command()
     count_actions(file_list)
+    display_file_names()
     display_count_dict(actions, 
              "There are {} distinct actions.".format(len(actions)),
              options)
