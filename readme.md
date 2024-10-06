@@ -5,7 +5,7 @@ rdb-dircount
 Count directories backed up by rdiff-backup
 -------------------------------------------
 
-rdiff-backup can list the files involved in a backup, however, the list can be overwhelming. rdb-dircount.py counts the occurrences of each directory so you can see which ones are contributing the most files to a given backup. 
+[rdiff-backup](https://rdiff-backup.net/) can list the files involved in a backup, however, the list can be overwhelming. rdb-dircount.py counts the occurrences of each directory so you can see which ones are contributing the most files to a given backup. 
 
 It expects the output of the command "rdiff-backup list files ..." 
 
